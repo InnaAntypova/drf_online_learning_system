@@ -23,3 +23,5 @@ tzdata==2023.4
 wcwidth==0.2.13
 
 python-dotenv~=1.0.1
+django-filter~=23.5
+uuid~=1.30
