@@ -3,6 +3,10 @@ from users.apps import UsersConfig
 from users.views.user import UserUpdateAPIView, UserProfileAPIView, UserRegistrationAPIView, UserListAPIView, \
     DestroyAPIView
 from users.views.payment import PaymentListAPIView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 app_name = UsersConfig.name
 
@@ -13,6 +17,9 @@ urlpatterns = [
     path('all/', UserListAPIView.as_view(), name='all_users'),
     path('delete/<int:pk>/', DestroyAPIView.as_view(), name='delete_user'),
     path('<int:pk>/profile/', UserProfileAPIView.as_view(), name='user_profile'),
+    # JWT
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # payment
     path('payments/', PaymentListAPIView.as_view(), name='payments_list')
 ]
