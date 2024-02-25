@@ -11,7 +11,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course.py/', verbose_name='Превью (картинка)', **NULLABLE)
     description = models.TextField(verbose_name='Описание', **NULLABLE)
 
-    # owners = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
 
     def __str__(self):
         return f'{self.title}'
@@ -30,6 +30,8 @@ class Lesson(models.Model):
 
     course = models.ForeignKey('materials.Course', related_name='name_course', on_delete=models.CASCADE,
                                verbose_name='Курс')
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
 
     def __str__(self):
         return f'{self.title} / {self.course}'
