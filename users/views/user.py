@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from rest_framework.generics import UpdateAPIView, RetrieveAPIView, CreateAPIView, ListAPIView, DestroyAPIView
 from rest_framework.response import Response
 from users.models import User
@@ -27,6 +28,7 @@ class UserRegistrationAPIView(CreateAPIView):
             user = serializer.save()
             user.set_password(serializer.data['password'])  # сделать зашифрованный пароль
             user.is_active = True  # активировать пользователя
+            user.groups.add(Group.objects.get(name='MEMBER'))  # добавить пользователя в группу
             user.save()
         return Response({'message': 'User создан успешно.'})
 
