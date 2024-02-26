@@ -5,7 +5,6 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -49,10 +48,6 @@ class User(AbstractUser):
     """ Модель для пользователя User"""
     objects = UserManager()
 
-    # class UserRole(models.TextChoices):
-    #     MEMBER = 'member', _('member')
-    #     MODERATOR = 'moderator', _('moderator')
-
     username = None
     email = models.EmailField(unique=True, verbose_name='Email')
     avatar = models.ImageField(upload_to='users/', verbose_name='Аватар', **NULLABLE)
@@ -64,8 +59,6 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False, verbose_name='Состояние активности')
     is_staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     is_superuser = models.BooleanField(default=False, verbose_name='Администратор')
-
-    # role = models.CharField(max_length=9, choices=UserRole.choices, default=UserRole.MEMBER)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
