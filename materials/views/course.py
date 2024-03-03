@@ -1,6 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from materials.models import Course
+from materials.paginators import CustomPaginator
 from materials.permissions import IsModerator, IsOwner
 from materials.serializers.course import CourseSerializer
 
@@ -8,6 +9,7 @@ from materials.serializers.course import CourseSerializer
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    pagination_class = CustomPaginator
 
     def get_permissions(self):
         """ Права доступа для ViewSet Course"""

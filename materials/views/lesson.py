@@ -1,4 +1,6 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
+
+from materials.paginators import CustomPaginator
 from materials.permissions import IsOwner, IsModerator
 from rest_framework.permissions import IsAuthenticated
 from materials.models import Lesson
@@ -9,6 +11,7 @@ class LessonListAPIView(ListAPIView):
     """ Представление для просмотра всех объектов """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = CustomPaginator
     permission_classes = [IsAuthenticated]
 
 
