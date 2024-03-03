@@ -20,8 +20,17 @@ class Command(BaseCommand):
 
         # Лист с Курсами
         course_list = [
-            {'title': 'Python', 'description': 'Изучение языка программирования Python с нуля.'},
-            {'title': 'SQL', 'description': 'Основы и методы использования SQL.'}
+            {'title': 'Python', 'description': 'Изучение языка программирования Python с нуля.', 'owner_id': 1},
+            {'title': 'SQL', 'description': 'Основы и методы использования SQL.', 'owner_id': 1},
+            {'title': 'Java', 'description': 'Научим всем ключевым навыкам Java-разработчика', 'owner_id': 1},
+            {'title': 'Профессия Фронтенд-разработчик',
+             'description': 'Фронтенд — всё, что мы видим на экране смартфона или компьютера', 'owner_id': 1},
+            {'title': 'Инженер по тестированию',
+             'description': 'Вы научитесь находить ошибки в работе сайтов и приложений с помощью Java, '
+                            'JavaScript или Python.', 'owner_id': 1},
+            {'title': 'Профессия Веб-разработчик',
+             'description': 'Веб-разработчик создаёт сайты, сервисы и приложения, которыми мы ежедневно пользуемся.',
+             'owner_id': 1}
         ]
 
         fill_course = []
@@ -33,11 +42,21 @@ class Command(BaseCommand):
         # Лист с Уроками
         lessons_list = [
             {'title': 'Введение', 'description': 'Введение в основы программирования. Синтаксис. Функции. Циклы.',
-             'course_id': 1},
+             'course_id': 1, 'owner_id': 1},
             {'title': 'Основы веб-разработки', 'description': 'Знакомство с Linux, командной строкой. Git',
-             'course_id': 1},
-            {'title': 'Работа с БД', 'description': 'Базовые SQL-запросы.', 'course_id': 2},
-            {'title': 'DDL', 'description': 'Нормализация таблиц', 'course_id': 2},
+             'course_id': 1, 'owner_id': 1},
+            {'title': 'ООП', 'description': 'Погружение в объектно-ориентированное программирование (ООП)',
+             'course_id': 1, 'owner_id': 1},
+            {'title': 'Работа с базами данных', 'description': 'Осваиваем базы данных',
+             'course_id': 1, 'owner_id': 1},
+            {'title': 'Django', 'description': 'Осваиваем Django с нуля',
+             'course_id': 1, 'owner_id': 1},
+            {'title': 'DRF', 'description': 'Django Rest Framework',
+             'course_id': 1, 'owner_id': 1},
+            {'title': 'Docker', 'description': 'Основы Docker',
+             'course_id': 1, 'owner_id': 1},
+            {'title': 'Работа с БД', 'description': 'Базовые SQL-запросы.', 'course_id': 2, 'owner_id': 1},
+            {'title': 'DDL', 'description': 'Нормализация таблиц', 'course_id': 2, 'owner_id': 1},
         ]
 
         fill_lessons = []
