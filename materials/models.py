@@ -39,3 +39,17 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'Урок'
         verbose_name_plural = 'Уроки'
+
+
+class Subscription(models.Model):
+    """ Модель для сущности Subscription (Подписка) """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
+    course = models.ForeignKey('materials.Course', related_name='sub_course', on_delete=models.CASCADE,
+                               verbose_name='Курс')
+
+    def __str__(self):
+        return f'{self.user}/{self.course}'
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
