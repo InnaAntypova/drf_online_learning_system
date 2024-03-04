@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from materials.models import Course, Lesson, Subscription
 from materials.serializers.lesson import LessonSerializer
-from materials.validators import URLValidator
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -27,4 +26,3 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
-        validators = [URLValidator(field='description')]
