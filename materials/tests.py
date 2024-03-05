@@ -8,6 +8,8 @@ from users.models import User
 
 
 class LessonTestCase(APITestCase):
+    """ Тестирование CRUD по Lesson (Урок) """
+
     def setUp(self) -> None:
         # группа для пользователя
         member_group, created = Group.objects.get_or_create(name='MEMBER')
@@ -56,8 +58,8 @@ class LessonTestCase(APITestCase):
         data = {
             'title': 'test1',
             'description': 'test1',
-            'course': self.course.pk,
-            'owner': self.user.pk
+            'course': self.course.id,
+            'owner': self.user.id
         }
         response = self.client.post('/create/', data=data)
         # print(response.data)
@@ -67,16 +69,16 @@ class LessonTestCase(APITestCase):
         )
         self.assertEquals(
             response.json(),
-            {'id': 2, 'title': 'test1', 'description': 'test1', 'image': None, 'video_url': None, 'course': 1,
-             'owner': 1}
+            {'id': 2, 'title': 'test1', 'description': 'test1', 'image': None, 'video_url': None,
+             'course': self.course.id, 'owner': self.user.id}
         )
         # проверка модератора
         self.client.force_authenticate(user=self.moder)
         data = {
             'title': 'test2',
             'description': 'test2',
-            'course': self.course.pk,
-            'owner': self.user.pk
+            'course': self.course.id,
+            'owner': self.user.id
         }
         response = self.client.post('/create/', data=data)
         self.assertEquals(
@@ -99,16 +101,17 @@ class LessonTestCase(APITestCase):
     def test_detail_lesson(self):
         """ Тест на получение детализации по уроку """
         self.client.force_authenticate(user=self.user)
-        response = self.client.get('/1/')
-        print(response.data)
+        response = self.client.get(f'/{self.lesson.id}/')
+        # print(response.data)
         self.assertEquals(
             response.status_code,
             status.HTTP_200_OK
         )
         self.assertEquals(
             response.json(),
-            {'id': 1, 'title': 'test', 'description': 'test', 'image': None, 'video_url': None, 'course': 1,
-             'owner': 1}
+            {'id': self.lesson.id, 'title': 'test', 'description': 'test', 'image': None, 'video_url': None,
+             'course': self.course.id,
+             'owner': self.user.id}
         )
 
     def test_update_lesson(self):
@@ -120,15 +123,16 @@ class LessonTestCase(APITestCase):
             'course': self.course.pk,
             'owner': self.user.pk
         }
-        response = self.client.patch('/1/update/', data=data)
+        response = self.client.patch(f'/{self.lesson.id}/update/', data=data)
         self.assertEquals(
             response.status_code,
             status.HTTP_200_OK
         )
         self.assertEquals(
             response.json(),
-            {'id': 1, 'title': 'test1_update', 'description': 'test1_update', 'image': None, 'video_url': None,
-             'course': 1, 'owner': 1}
+            {'id': self.lesson.id, 'title': 'test1_update', 'description': 'test1_update', 'image': None,
+             'video_url': None,
+             'course': self.course.id, 'owner': self.user.id}
         )
         # проверка модератора
         self.client.force_authenticate(user=self.moder)
@@ -138,33 +142,78 @@ class LessonTestCase(APITestCase):
             'course': self.course.pk,
             'owner': self.user.pk
         }
-        response = self.client.patch('/1/update/', data=data)
+        response = self.client.patch(f'/{self.lesson.id}/update/', data=data)
         self.assertEquals(
             response.status_code,
             status.HTTP_200_OK
         )
         self.assertEquals(
             response.json(),
-            {'id': 1, 'title': 'test1_update_moder', 'description': 'test1_update_moder', 'image': None,
-             'video_url': None, 'course': 1, 'owner': 1}
+            {'id': self.lesson.id, 'title': 'test1_update_moder', 'description': 'test1_update_moder', 'image': None,
+             'video_url': None, 'course': self.course.id, 'owner': self.user.id}
         )
 
     def test_delete_lesson(self):
         """ Тест для удаления урока """
         # проверка модератора
         self.client.force_authenticate(user=self.moder)
-        response = self.client.delete('/1/delete/')
+        response = self.client.delete(f'/{self.lesson.id}/delete/')
         self.assertEquals(
             response.status_code,
             status.HTTP_403_FORBIDDEN
         )
         # проверка пользователя
         self.client.force_authenticate(user=self.user)
-        response = self.client.delete('/1/delete/')
+        response = self.client.delete(f'/{self.lesson.id}/delete/')
         self.assertEquals(
             response.status_code,
             status.HTTP_204_NO_CONTENT
         )
         self.assertEquals(
             Lesson.objects.all().count(), 0
+        )
+
+
+class UserSubscriptionTestCase(APITestCase):
+    """ Тестирование UserSubscription (Подписки на курс у пользователя) """
+
+    def setUp(self) -> None:
+        # пользователь для теста
+        self.user = User.objects.create(
+            email='test1@test.ru', is_active=True
+        )
+        # курс для теста
+        self.course = Course.objects.create(
+            title='test',
+            description='test',
+            owner=self.user
+        )
+
+    def test_subscription(self):
+        """ Тестирование добавления/удаления подписки """
+        self.client.force_authenticate(user=self.user)
+        data = {
+            'user': self.user.id,
+            'course': self.course.id
+        }
+        # добавление подписки
+        response = self.client.post('/subs/', data=data)
+        # print(response.data)
+        self.assertEquals(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+        self.assertEquals(
+            response.json(),
+            {'message': 'Подписка добавлена'}
+        )
+        # удаление подписки
+        response = self.client.post('/subs/', data=data)
+        self.assertEquals(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+        self.assertEquals(
+            response.json(),
+            {'message': 'Подписка удалена'}
         )
