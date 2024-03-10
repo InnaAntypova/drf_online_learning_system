@@ -78,6 +78,10 @@ class Payment(models.Model):
         CASH = "Наличные"
         TRANSFER = "Перевод на карту"
 
+    class PaymentStatus(models.TextChoices):
+        UNPAID = "Не оплачен"
+        PAID = "Оплачен"
+
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='user', verbose_name='Пользователь')
     pay_date = models.DateField(verbose_name='Дата оплаты')
     paid_course = models.ForeignKey('materials.Course', on_delete=models.CASCADE, related_name='paid_course',
@@ -87,3 +91,7 @@ class Payment(models.Model):
     payment_amount = models.PositiveIntegerField(verbose_name='Сумма оплаты')
     payment_method = models.CharField(choices=PaymentMethod.choices, default=PaymentMethod.CASH,
                                       verbose_name='Способ оплаты')
+    payment_id = models.CharField(verbose_name='ID сессии платежа', **NULLABLE)
+    payment_url = models.TextField(verbose_name='URL платежа', **NULLABLE)
+    payment_status = models.CharField(choices=PaymentStatus.choices, default=PaymentStatus.UNPAID,
+                                      verbose_name='Статус платежа')

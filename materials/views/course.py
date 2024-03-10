@@ -4,6 +4,7 @@ from materials.models import Course
 from materials.paginators import CustomPaginator
 from materials.permissions import IsModerator, IsOwner
 from materials.serializers.course import CourseSerializer
+from users.services import create_product, delete_product
 
 
 class CourseViewSet(ModelViewSet):
@@ -26,4 +27,12 @@ class CourseViewSet(ModelViewSet):
     def perform_create(self, serializer):
         new_course = serializer.save()
         new_course.owner = self.request.user  # владелец
+        product = create_product(new_course.title)  # создание продукта в stripe.com
+        # print(product)
+        new_course.pay_id = product['id']
         new_course.save()
+
+    def perform_destroy(self, instance):
+        instance = self.get_object()
+        delete_product(instance.pay_id)  # удаление продукта в stripe.com
+        instance.delete()

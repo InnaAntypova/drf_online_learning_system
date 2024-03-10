@@ -10,11 +10,14 @@ class Course(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название')
     image = models.ImageField(upload_to='course.py/', verbose_name='Превью (картинка)', **NULLABLE)
     description = models.TextField(verbose_name='Описание', **NULLABLE)
+    amount = models.PositiveIntegerField(verbose_name='Стоимость', **NULLABLE)
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
 
+    pay_id = models.CharField(verbose_name='ID для платежей', **NULLABLE)
+
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title}/{self.owner}/{self.pay_id}'
 
     class Meta:
         verbose_name = 'Курс'
