@@ -11,7 +11,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course.py/', verbose_name='Превью (картинка)', **NULLABLE)
     description = models.TextField(verbose_name='Описание', **NULLABLE)
     amount = models.PositiveIntegerField(verbose_name='Стоимость', **NULLABLE)
-
+    last_update = models.DateTimeField(auto_now_add=True, verbose_name='Последнее обновление', **NULLABLE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
 
     pay_id = models.CharField(verbose_name='ID для платежей', **NULLABLE)
